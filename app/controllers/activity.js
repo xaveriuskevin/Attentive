@@ -20,7 +20,7 @@ exports.index = (req, res , next) => {
             
         const verify = jwt.verify(token,TOKEN_KEY)
         
-        Activities.find()
+        Activities.find().populate("participant")
         .then(activity => {
             res.send(activity);
             }).catch(err => {
@@ -45,7 +45,7 @@ exports.indexByTitle = (req, res , next) => {
             
         const verify = jwt.verify(token,TOKEN_KEY)
         
-        Activities.findOne({title : req.params.title})
+        Activities.findOne({title : req.params.title}).populate("participant")
         .then(activity => {
             if(!activity) {
                 return res.status(404).send({
