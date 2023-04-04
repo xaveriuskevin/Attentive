@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = mongoose.model('users');
+const Skill = mongoose.model('skill');
 const TOKEN_KEY = 'Attentive-Token'
 
 exports.register = (req, res , next) => {
@@ -28,6 +29,15 @@ exports.register = (req, res , next) => {
                 return res.status(400).send({
                     message: "Email Or Username Already Exist!"
                 });
+            }
+
+            if(req.body.skill){
+                let findSkill = await Skill.findOne({skill_name : req.body.skills})
+                if(!findSkill){
+                    return res.status(400).send({
+                        message: "Skill Not Found"
+                    });
+                }
             }
 
             const user = new User({
