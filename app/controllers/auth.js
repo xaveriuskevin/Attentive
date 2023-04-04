@@ -104,9 +104,11 @@ exports.logout = (req, res , next) => {
     if(token){
         const verify = jwt.verify(req.headers['x-access-token'], TOKEN_KEY)
        
-
-        return res.status(200).send({
-            message : "test"
+        exporter.setHashKeyValuesIntoRedis('expired_token', [token])
+        .then(() => {
+            res.status(200).json({
+                msg: 'logged out'
+            })
         })
     }else{
         return res.status(400).send({
